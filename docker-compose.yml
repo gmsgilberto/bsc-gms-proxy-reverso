@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  
+  bsc-gms-app-proxy: #http://localhost:8000/
+    build: 
+      context: ./nginx
+      dockerfile: nginx.dockerfile
+    container_name: bsc-gms-app-proxy
+    ports: 
+      - '80:80'
+      - '9161:9161'
+    networks:
+      - bsc-gms-network
+    volumes:
+      - type: volume
+        source: proxyreversolog
+        target: /var/log/nginx/
+
+networks:
+  bsc-gms-network:
+    driver: bridge
+
+volumes:
+  proxyreversolog:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './volumes/logs'
